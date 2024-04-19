@@ -1,11 +1,17 @@
 #include<iostream>
 using namespace std;
 class Cache {
-	bool valid;//有效位
+	bool valid;//valid
 	int tag;
-
+	int data;
+public:
+	Cache() {
+		valid = false;
+		tag = -1;
+		data = -1;
+	}
 };
-//直接映射
+//direct mapped
 
 
 
@@ -14,5 +20,6 @@ class Cache {
 
 
 int main() {
-
+	Cache a;
+	return 0;
 }
