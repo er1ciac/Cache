@@ -23,7 +23,7 @@ public:
         tag = new_tag;
         data = new_data;
     }
-    
+
 };
 
 int search(vector<Cache>& cacheTable, int address) {
@@ -68,6 +68,7 @@ void move_into_cache(int address,Cache c)
     c.valid=1;
 }
 
+
 int main()
 {
 vector<Cache> cacheTable;
@@ -79,6 +80,7 @@ cacheTable.push_back(c1);
 cacheTable.push_back(c2);
 cacheTable.push_back(c3);
 cacheTable.push_back(c4);
+
     ifstream file("mmu.out");
     string line;
     if (file.is_open()) {
@@ -104,5 +106,7 @@ cacheTable.push_back(c4);
         cerr << "Unable to open file\n";
         return 1;
     }
+
 return 0;
 }
+

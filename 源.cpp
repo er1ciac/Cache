@@ -12,7 +12,7 @@ public:
 		data = -1;
 	}
 };
-//暂时不用继承的方法写代码了
+//暂时不用继承的方法写代码了，如果是相联模式下就用这个类当节点
 class size_Cache{
 public:
 	bool valid;
