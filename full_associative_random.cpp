@@ -3,6 +3,7 @@
 #include <fstream>
 #include <istream>
 #include <sstream>
+#include <random>
 using namespace std;
 int misscount = 0; 
 int hitcount = 0; 
@@ -23,50 +24,49 @@ public:
         tag = new_tag;
         data = new_data;
     }
-    
 };
 
 int search(vector<Cache>& cacheTable, int address) {
-    int ntag = address / 16;
-    uint64_t address_uint64 = static_cast<uint64_t>(address);
-    uint64_t shifted=address>>2;
-    uint64_t last_two_bits = shifted & 0b11;
-    int index=static_cast<int>(last_two_bits);
-   
-        if (cacheTable[index].tag == ntag && cacheTable[index].valid == true) 
+    int ntag = address / 4;
+    for (int i =0;i<4;i++)
+    {
+        if(cacheTable[i].tag==ntag&&cacheTable[i].valid==1)
         {
-           
             hitcount+=1;
-            return index;
+            return 1;
         }
-        else if(cacheTable[index].tag != ntag && cacheTable[index].valid == true)
-        {
-            exchage_into_cache(address,cacheTable[index]);
-            misscount+=1;
-       
-        return -1; 
-        }
-     else   
-    { 
-        move_into_cache(address,cacheTable[index]);
-        misscount+=1;
-        
-        return -1; 
     }
+    misscount+=1;
+     for (int i =0;i<4;i++)
+     {
+        if(cacheTable[i].valid==0)
+        {
+            move_into_cache(address,cacheTable[i]);
+            return -1;
+        }
+     }
+     exchage_into_cache_random(address,cacheTable);
+     return -1;
 }
 
-void exchage_into_cache(int address,Cache c)
+void exchage_into_cache_random(int address,vector<Cache>& c)
 {
-int ntag = address / 16;
-    c.tag=ntag;
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> dis(0, 3);
+    int random_number = dis(gen);
+    int ntag = address / 4;
+    c[random_number].tag=ntag;
 }
+
 
 void move_into_cache(int address,Cache c)
 {
-    int ntag = address / 16;
+    int ntag = address / 4;
     c.tag=ntag;
     c.valid=1;
 }
+
 
 int main()
 {
