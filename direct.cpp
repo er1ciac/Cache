@@ -61,6 +61,7 @@ int search(vector<Cache>& cacheTable, int address) {
     }
 }
 
+
 int main()
 {
     vector<Cache> cacheTable;
