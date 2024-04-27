@@ -2,7 +2,8 @@
 #include <vector>
 #include <fstream>
 #include <istream>
-#include <sstream>
+#include <string>
+#include <regex>
 using namespace std;
 int misscount = 0;
 int hitcount = 0;
@@ -73,26 +74,27 @@ int main()
     cacheTable.push_back(c2);
     cacheTable.push_back(c3);
     cacheTable.push_back(c4);
-    int address1 = 0x16588;
-    int address2 = 0x3f9d8;
-    int address3 = 0x16588;
-    int address4 = 0x16588;
-    int address5 = 0x56b78;
-    int address6 = 0x16590;
-    int address7 = 0x16590;
-    int address8 = 0x16590;
-    int address9 = 0x16598;
-    int address10 = 0x3f9f8;
-    search(cacheTable, address1);
-    search(cacheTable, address2);
-    search(cacheTable, address3);
-    search(cacheTable, address4);
-    search(cacheTable, address5);
-    search(cacheTable, address6);
-    search(cacheTable, address7);
-    search(cacheTable, address8);
-    search(cacheTable, address9);
-    search(cacheTable, address10);
-    cout << misscount << hitcount;
+    ifstream file("MemoryAccess.out");
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file." << std::endl;
+        return 1;
+    }
+
+    regex address_regex("address\\s(0x[0-9a-fA-F]+)");
+    string line;
+
+    while (getline(file, line)) {
+        smatch match;
+        if (regex_search(line, match, address_regex)) {
+            string address_str = match[1];
+            int address = stoi(address_str, nullptr, 16);
+            search(cacheTable,address);
+            
+        }
+    }
+    file.close();
+
+    cout <<"misscount"<< misscount << endl;
+    cout<< "hitcount" << hitcount << endl;
     return 0;
 }
